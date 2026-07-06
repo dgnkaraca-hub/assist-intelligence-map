@@ -131,13 +131,30 @@ export const seedItemsByCell: Record<string, DataItem[]> = {
   "agt-logs": [{ id: "agt-lo-1", title: "Build sessions logged in project memory", tag: "stream" }],
   "agt-policies": [{ id: "agt-po-1", title: "Nothing external without approval", tag: "guardrail" }],
 
-  // inbox — the real signal (interview 2026-07-06)
+  // inbox — the real signal (updated 2026-07-06)
   "inb-unread": [
-    { id: "inb-un-1", title: "Festival / event invitation", note: "performance opportunity — needs an answer", tag: "unread" },
+    {
+      id: "inb-un-1",
+      title: "Croatia Handpan Festival — invitation from Ivan Judas",
+      note: "performance invitation; process is underway",
+      tag: "in progress",
+    },
   ],
-  "inb-routed": [],
+  "inb-routed": [
+    {
+      id: "inb-ro-1",
+      title: "Passport details → submitted to the organizer",
+      note: "required for the invitation process",
+      tag: "done",
+    },
+  ],
   "inb-drafted": [],
   "inb-flagged": [
-    { id: "inb-fl-1", title: "Festival invitation — follow up", note: "deadline unknown; confirm dates", tag: "flagged" },
+    {
+      id: "inb-fl-1",
+      title: "Waiting on confirmation from Ivan Judas",
+      note: "follow up if the waiting period drags; log dates when announced",
+      tag: "waiting",
+    },
   ],
 };

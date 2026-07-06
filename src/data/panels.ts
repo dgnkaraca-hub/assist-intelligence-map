@@ -31,9 +31,9 @@ export const attention: AttentionItem[] = [
   },
   {
     id: "att-inbox",
-    kicker: "needs an answer",
-    title: "Festival invitation in the inbox",
-    detail: "A performance opportunity is waiting; confirm the dates before it goes stale.",
+    kicker: "waiting on organizer",
+    title: "Croatia Handpan Festival — Ivan Judas",
+    detail: "Passport details submitted; the invitation process is in the organizer's hands now.",
     icon: "inbox",
     accent: "rose",
     nodeId: "inbox",
@@ -67,8 +67,8 @@ export const recommendations: Recommendation[] = [
   },
   {
     id: "rec3",
-    title: "Answer the festival invitation",
-    detail: "One signal waiting in the inbox; confirm dates and reply.",
+    title: "Track the Croatia festival process",
+    detail: "Passport submitted — set a follow-up with Ivan Judas and log the dates once confirmed.",
     accent: "teal",
     nodeId: "inbox",
   },
