@@ -9,7 +9,8 @@
 import { seedItemsByCell } from "../data/items";
 import type { DataItem } from "../types";
 
-export const ITEMS_KEY = "assist-intelligence:items.v1";
+// v2: 2026-07-06 — seeds replaced with real content; v1 held demo-era records.
+export const ITEMS_KEY = "assist-intelligence:items.v2";
 
 export function loadItems(): Record<string, DataItem[]> {
   const seed: Record<string, DataItem[]> = { ...seedItemsByCell };
