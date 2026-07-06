@@ -32,8 +32,8 @@ export const attention: AttentionItem[] = [
   {
     id: "att-inbox",
     kicker: "waiting on organizer",
-    title: "Croatia Handpan Festival — Ivan Judas",
-    detail: "Passport details submitted; the invitation process is in the organizer's hands now.",
+    title: "Croatia Handpan Festival",
+    detail: "Invitation from Ivan Judas — passport details submitted; the process is in the organizer's hands now.",
     icon: "inbox",
     accent: "rose",
     nodeId: "inbox",
