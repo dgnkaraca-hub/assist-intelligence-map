@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Assist Intelligence — Obsidian Atrium (design reference)</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.11.0/dist/tabler-icons.min.css"/>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Space+Grotesk:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap');
+  html,body{margin:0;height:100%;background:#05060a}
+  body{display:flex;align-items:center;justify-content:center;padding:24px;box-sizing:border-box;font-family:'Space Grotesk',system-ui,sans-serif}
+  .frame{width:100%;max-width:980px}
+  .ai-stage{position:relative;width:100%;aspect-ratio:680/440;min-height:300px;background:#000;border-radius:14px;overflow:hidden;box-shadow:0 30px 80px rgba(0,0,0,.6)}
+  .ai-board{position:absolute;inset:0;width:100%;height:100%;display:block}
+  .ai-ov{position:absolute;inset:0;pointer-events:none}
+  .topbar{position:absolute;top:0;left:0;right:0;height:9.5%;display:flex;align-items:center;justify-content:space-between;padding:0 18px;border-bottom:1px solid rgba(120,140,180,.12);box-sizing:border-box}
+  .mono{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.24em;color:#7a849c;text-transform:uppercase}
+  .status{display:flex;align-items:center;gap:8px}
+  .dot{width:6px;height:6px;border-radius:50%;background:#5b8cff;box-shadow:0 0 8px 1px rgba(91,140,255,.7);animation:blink 2.4s ease-in-out infinite}
+  .corelabel{position:absolute;left:50%;top:57.5%;transform:translateX(-50%);text-align:center}
+  .aw{display:block;font-family:'Instrument Serif',Georgia,serif;font-size:30px;color:#e9eef9;line-height:.9}
+  .ak{display:block;margin-top:6px;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.22em;color:#7a849c}
+  .node-ic{position:absolute;transform:translate(-50%,-50%);color:#aeb9d2;font-size:14px;line-height:1}
+  .node-ic.pri{color:#facc15}
+  .node-lab{position:absolute;transform:translateX(-50%);text-align:center;white-space:nowrap;font-size:12px;font-weight:500;color:#aeb9d2;letter-spacing:.01em}
+  .node-lab.pri{color:#fde68a}
+  .console{position:absolute;left:50%;bottom:4.5%;transform:translateX(-50%);width:min(62%,440px);background:rgba(10,15,28,.55);-webkit-backdrop-filter:blur(20px);backdrop-filter:blur(20px);border:1px solid rgba(120,140,180,.12);border-radius:10px;padding:12px 15px;box-sizing:border-box}
+  .ex .q{font-family:'JetBrains Mono',monospace;font-size:11px;color:#7a849c}
+  .ex .a{margin-top:5px;font-size:13px;color:#aeb9d2;line-height:1.45}
+  .ex .a .lead{font-family:'Instrument Serif',Georgia,serif;font-style:italic;font-size:16px;color:#e9eef9;margin-right:5px}
+  .inrow{margin-top:10px;padding-top:9px;border-top:1px solid rgba(120,140,180,.10);display:flex;align-items:center;gap:8px}
+  .inrow .ph{font-family:'JetBrains Mono',monospace;font-size:11px;color:#7a849c}
+  .caret{width:1px;height:13px;background:#5b8cff;animation:blink 1.1s step-end infinite}
+  @keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
+  @keyframes breathe{0%,100%{transform:scale(1)}50%{transform:scale(1.035)}}
+  @keyframes glow{0%,100%{opacity:.6}50%{opacity:1}}
+  @keyframes spark{0%,100%{opacity:.55;r:5}50%{opacity:1;r:7.5}}
+  @keyframes flow{to{stroke-dashoffset:-40}}
+  .core-breathe{transform-box:fill-box;transform-origin:center;animation:breathe 6s ease-in-out infinite}
+  .core-glow{animation:glow 6s ease-in-out infinite}
+  .spark{animation:spark 6s ease-in-out infinite}
+  .pad{animation:padpulse 5s ease-in-out infinite}
+  @keyframes padpulse{0%,100%{stroke:rgba(140,175,255,.18)}50%{stroke:rgba(178,206,255,.42)}}
+  .live-trace{animation:flow 2.6s linear infinite}
+  @media (prefers-reduced-motion:reduce){*{animation:none!important}.live-trace{stroke-dashoffset:0}}
+</style>
+</head>
+<body>
+<div class="frame">
+  <div class="ai-stage" id="aiStage">
+    <svg class="ai-board" viewBox="0 0 680 440" preserveAspectRatio="none" aria-label="Assist Core wired to eight intelligence nodes by hex-circuit traces" role="img">
+      <defs>
+        <radialGradient id="pool" cx="50%" cy="46%" r="44%">
+          <stop offset="0%" stop-color="rgba(91,140,255,0.13)"/>
+          <stop offset="42%" stop-color="rgba(91,140,255,0.035)"/>
+          <stop offset="100%" stop-color="rgba(0,0,0,0)"/>
+        </radialGradient>
+        <radialGradient id="core" cx="38%" cy="33%" r="74%">
+          <stop offset="0%" stop-color="#bff6fd"/>
+          <stop offset="20%" stop-color="#5b8cff"/>
+          <stop offset="56%" stop-color="#0e3a52"/>
+          <stop offset="100%" stop-color="#04222e"/>
+        </radialGradient>
+        <radialGradient id="fade" cx="50%" cy="46%" r="46%">
+          <stop offset="0%" stop-color="#fff"/>
+          <stop offset="48%" stop-color="#fff" stop-opacity=".75"/>
+          <stop offset="100%" stop-color="#000"/>
+        </radialGradient>
+        <mask id="latMask"><rect width="680" height="440" fill="url(#fade)"/></mask>
+      </defs>
+      <rect width="680" height="440" fill="#000"/>
+      <rect width="680" height="440" fill="url(#pool)" class="core-glow"/>
+      <g id="lattice" mask="url(#latMask)"></g>
+      <g id="traces"></g>
+      <g id="pads"></g>
+      <g id="discs"></g>
+      <g id="coreGroup">
+        <circle cx="340" cy="202" r="74" fill="rgba(91,140,255,0.05)" class="core-glow"/>
+        <circle cx="340" cy="202" r="58" fill="rgba(91,140,255,0.07)" class="core-glow"/>
+        <g class="core-breathe">
+          <circle cx="340" cy="202" r="47" fill="rgba(91,140,255,0.10)"/>
+          <g id="filaments"></g>
+          <circle cx="340" cy="202" r="40" fill="url(#core)"/>
+          <circle cx="340" cy="202" r="40.5" fill="none" stroke="#5b8cff" stroke-width="1" opacity=".9"/>
+          <circle cx="340" cy="202" r="6" fill="#bff6fd" class="spark"/>
+        </g>
+      </g>
+      <g id="particleLayer"></g>
+    </svg>
+    <div class="ai-ov" id="ovl">
+      <div class="topbar">
+        <span class="mono">Assist Intelligence</span>
+        <span class="status"><span class="dot"></span><span class="mono">Core online · v0.1</span></span>
+      </div>
+      <div class="corelabel"><span class="aw">Assist</span><span class="ak">Core online</span></div>
+      <div class="console">
+        <div class="ex">
+          <div class="q">what needs my decision today?</div>
+          <div class="a"><span class="lead">Assist</span>Three items in Decisions are waiting on you.</div>
+        </div>
+        <div class="inrow"><span class="ph">Ask Assist…</span><span class="caret"></span></div>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+(function(){
+  var SVGNS="http://www.w3.org/2000/svg";
+  var CX=340,CY=202;
+  function el(t,a){var e=document.createElementNS(SVGNS,t);for(var k in a)e.setAttribute(k,a[k]);return e;}
+  function hexPts(cx,cy,s){var p=[];for(var k=0;k<6;k++){var ang=Math.PI/180*(60*k-90);p.push((cx+s*Math.cos(ang)).toFixed(1)+","+(cy+s*Math.sin(ang)).toFixed(1));}return p.join(" ");}
+  var nodes=[
+    {n:"Memory",i:"ti-brain",x:150,y:104},
+    {n:"Tasks",i:"ti-list-check",x:262,y:74},
+    {n:"Research",i:"ti-microscope",x:418,y:74,live:true},
+    {n:"Knowledge",i:"ti-book-2",x:530,y:104},
+    {n:"Studio",i:"ti-palette",x:150,y:300},
+    {n:"Decisions",i:"ti-git-fork",x:262,y:330,pri:true},
+    {n:"Agents",i:"ti-robot",x:418,y:330},
+    {n:"Inbox",i:"ti-inbox",x:530,y:300}
+  ];
+  var lat=document.getElementById("lattice");
+  var s=24,hw=s*Math.sqrt(3),hv=s*1.5;
+  for(var r=-7;r<=7;r++){for(var c=-9;c<=9;c++){
+    var x=CX+c*hw+(r&1?hw/2:0), y=CY+r*hv;
+    if(Math.hypot(x-CX,y-CY)>320)continue;
+    lat.appendChild(el("polygon",{points:hexPts(x,y,s),fill:"none",stroke:"rgba(110,145,220,0.06)","stroke-width":"1"}));
+  }}
+  document.getElementById("pads").appendChild(el("polygon",{points:hexPts(CX,CY,30),fill:"none",stroke:"rgba(178,206,255,0.40)","stroke-width":"1"}));
+  var fil=document.getElementById("filaments");
+  for(var f=0;f<8;f++){var a=Math.PI/4*f;fil.appendChild(el("line",{x1:CX,y1:CY,x2:(CX+38*Math.cos(a)).toFixed(1),y2:(CY+38*Math.sin(a)).toFixed(1),stroke:"rgba(165,243,252,0.10)","stroke-width":"1"}));}
+  function elbow(bx,by){var dx=bx-CX,dy=by-CY,T=Math.tan(Math.PI/3),sx=Math.sign(dx)||1,sy=Math.sign(dy)||1,adx=Math.abs(dx),ady=Math.abs(dy),qx,qy;
+    if(adx>=ady/T){qx=bx-sx*(ady/T);qy=CY;}else{qx=bx;qy=CY+sy*(adx*T);}
+    return "M "+CX+" "+CY+" L "+qx.toFixed(1)+" "+qy.toFixed(1)+" L "+bx+" "+by;}
+  var tg=document.getElementById("traces"),pg=document.getElementById("pads"),dg=document.getElementById("discs"),ov=document.getElementById("ovl");
+  nodes.forEach(function(nd,idx){
+    var d=elbow(nd.x,nd.y);
+    if(nd.live){tg.appendChild(el("path",{d:d,id:"liveTrace",fill:"none",stroke:"#22d3ee","stroke-width":"1.3","stroke-dasharray":"3 7",opacity:".95","class":"live-trace"}));}
+    else{tg.appendChild(el("path",{d:d,fill:"none",stroke:"#3a4a6e","stroke-width":"1","stroke-dasharray":"3 7",opacity:".8"}));}
+    var pad=el("polygon",{points:hexPts(nd.x,nd.y,18),fill:"none",stroke:"rgba(140,175,255,0.18)","stroke-width":"1","class":"pad"});
+    pad.style.animationDelay=((idx*0.83)%4).toFixed(2)+"s";pg.appendChild(pad);
+    dg.appendChild(el("circle",{cx:nd.x,cy:nd.y,r:"11",fill:"#070a14",stroke:"rgba(120,140,180,0.22)","stroke-width":"1"}));
+    if(nd.pri){
+      dg.appendChild(el("circle",{cx:nd.x,cy:nd.y,r:"15.5",fill:"none",stroke:"#facc15","stroke-width":"1.2",opacity:".9"}));
+      dg.appendChild(el("circle",{cx:nd.x,cy:nd.y,r:"22",fill:"none",stroke:"rgba(250,204,21,0.30)","stroke-width":"5"}));
+    }
+    var ic=document.createElement("i");ic.className="ti "+nd.i+(nd.pri?" node-ic pri":" node-ic");ic.setAttribute("aria-hidden","true");
+    ic.style.left=(nd.x/680*100)+"%";ic.style.top=(nd.y/440*100)+"%";ov.appendChild(ic);
+    var lab=document.createElement("div");lab.className="node-lab"+(nd.pri?" pri":"");lab.textContent=nd.n;
+    lab.style.left=(nd.x/680*100)+"%";lab.style.top=((nd.y+(nd.y<CY?-28:28))/440*100)+"%";ov.appendChild(lab);
+  });
+  var lt=document.getElementById("liveTrace");
+  if(lt){
+    var part=el("circle",{r:"3.4",fill:"#bff6fd"}),halo=el("circle",{r:"6",fill:"rgba(34,211,238,0.30)"});
+    var am1=el("animateMotion",{dur:"3s",repeatCount:"indefinite",rotate:"auto"});am1.appendChild(el("mpath",{href:"#liveTrace"}));
+    var am2=el("animateMotion",{dur:"3s",repeatCount:"indefinite",rotate:"auto"});am2.appendChild(el("mpath",{href:"#liveTrace"}));
+    halo.appendChild(am1);part.appendChild(am2);
+    var pl=document.getElementById("particleLayer");pl.appendChild(halo);pl.appendChild(part);
+  }
+})();
+</script>
+</body>
+</html>
