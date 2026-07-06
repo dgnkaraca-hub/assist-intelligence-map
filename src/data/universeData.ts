@@ -236,7 +236,7 @@ export const mapData: MapData = {
       thesis:
         "Sound is treated as a way of paying attention — resonance, rhythm, and presence as one continuous practice.",
       related: ["education", "film", "data"],
-      color: "#5b8cff",
+      color: "#2DD4BF",
       children: [
         {
           id: "handpan-performance",
@@ -293,7 +293,7 @@ export const mapData: MapData = {
       thesis:
         "Teaching turns the handpan from an object of fascination into a learnable, shareable language.",
       related: ["sound", "international", "film"],
-      color: "#7ea6ff",
+      color: "#FACC15",
       children: [
         {
           id: "workshops",
@@ -349,7 +349,7 @@ export const mapData: MapData = {
       blurb: "Visual storytelling and audiovisual craft.",
       thesis: "Image and sound are composed together — editing treated as rhythm, structure as meaning.",
       related: ["sound", "media", "dh"],
-      color: "#4a78e0",
+      color: "#8B5CF6",
       children: [
         {
           id: "visual-story",
@@ -414,7 +414,7 @@ export const mapData: MapData = {
       thesis:
         "Datasets become questions — structure, pattern, and story read out of cultural and media data.",
       related: ["dh", "media", "sound"],
-      color: "#aac6ff",
+      color: "#5EEAD4",
       children: [
         {
           id: "data-analysis",
@@ -464,7 +464,7 @@ export const mapData: MapData = {
       thesis:
         "Computational methods in the service of cultural memory — from epigraphy to iconography to archives.",
       related: ["data", "film", "international"],
-      color: "#e6eeff",
+      color: "#A78BFA",
       children: [
         {
           id: "samal-network",
@@ -542,7 +542,7 @@ export const mapData: MapData = {
       thesis:
         "Public communication carries the practice to broad audiences across broadcast and digital platforms.",
       related: ["film", "international", "data"],
-      color: "#93b4ff",
+      color: "#FB7185",
       children: [
         {
           id: "trt",
@@ -602,7 +602,7 @@ export const mapData: MapData = {
       thesis:
         "The practice travels — institutions, festivals, and remote collaborations across borders.",
       related: ["education", "media", "dh"],
-      color: "#cadcff",
+      color: "#F8FAFC",
       children: [
         {
           id: "institutions",

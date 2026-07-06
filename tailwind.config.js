@@ -28,25 +28,27 @@ export default {
         line: "rgba(148, 163, 184, 0.18)",
         "line-strong": "rgba(148, 163, 184, 0.32)",
         panel: "rgba(17, 24, 39, 0.62)",
-        // Universe layer (features/universe) — the knowledge-map space palette,
-        // prefixed u-* so it can't collide with the assist tokens above.
-        "u-bg": "#070a12",
-        "u-panel": "#0e1424",
-        "u-ink": "#e7ecf7",
-        "u-ink-2": "#b6c0d6",
-        "u-muted": "#8b96ad",
-        "u-line": "#2a3650",
-        "u-hair": "#1b2438",
-        "u-node": "#0f1830",
-        "u-node-2": "#14203c",
-        "u-accent": "#5b8cff",
+        // Universe layer (features/universe) — kept as separate u-* tokens so the
+        // layers can diverge, but currently ALIGNED to the assist palette
+        // (2026-07-06 retheme; mirrors the ASSIST RETHEME block in universe.css).
+        "u-bg": "#070912",
+        "u-panel": "#0B1020",
+        "u-ink": "#F8FAFC",
+        "u-ink-2": "#CBD5E1",
+        "u-muted": "#94A3B8",
+        "u-line": "rgba(148, 163, 184, 0.28)",
+        "u-hair": "rgba(148, 163, 184, 0.14)",
+        "u-node": "#0d1424",
+        "u-node-2": "#111827",
+        "u-accent": "#5EEAD4",
       },
       fontFamily: {
         display: ["Inter", "-apple-system", "BlinkMacSystemFont", "Segoe UI", "sans-serif"],
         ui: ["Inter", "-apple-system", "BlinkMacSystemFont", "Segoe UI", "sans-serif"],
         mono: ["'JetBrains Mono'", "ui-monospace", "SFMono-Regular", "monospace"],
-        // Universe layer display serif (knowledge-map identity type).
-        "u-display": ["'Instrument Serif'", "Georgia", "'Times New Roman'", "serif"],
+        // Universe display type — aligned to assist Inter (2026-07-06 retheme;
+        // restore the Instrument Serif stack here to bring the serif back).
+        "u-display": ["Inter", "-apple-system", "BlinkMacSystemFont", "Segoe UI", "sans-serif"],
       },
       boxShadow: {
         // Restrained — glow only signals activity/selection.

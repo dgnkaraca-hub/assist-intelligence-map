@@ -1061,3 +1061,148 @@
     animation: none !important;
   }
 }
+
+/* ============================================================
+   ASSIST RETHEME (2026-07-06)
+   ------------------------------------------------------------
+   The Universe now speaks the Assist Intelligence design
+   language: bg-void navy, cyan accent, Inter + JetBrains Mono.
+   Everything below OVERRIDES the space-blue defaults above —
+   the original values are kept so this block is the single
+   place to tune (or delete, to restore the old look).
+   ============================================================ */
+.universe-root {
+  --bg: #070912;
+  --bg-2: #0b1020;
+  --panel: #0b1020;
+  --panel-2: #111827;
+  --text: #f8fafc;
+  --text-2: #cbd5e1;
+  --muted: #94a3b8;
+  --line: rgba(148, 163, 184, 0.24);
+  --hair: rgba(148, 163, 184, 0.14);
+  --node: #0d1424;
+  --node-2: #111827;
+  --node-border: rgba(148, 163, 184, 0.34);
+  --accent: #5eead4;
+  --accent-2: #94a3b8;
+  --accent-soft: rgba(94, 234, 212, 0.14);
+  --glow: rgba(94, 234, 212, 0.45);
+  --font-display: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
+  /* the same quiet wash the Assist home sits on */
+  background:
+    radial-gradient(900px 640px at 50% 44%, rgba(94, 234, 212, 0.05), transparent 62%),
+    radial-gradient(1200px 900px at 50% 120%, rgba(139, 92, 246, 0.05), transparent 60%),
+    linear-gradient(180deg, #090c16 0%, #070912 55%, #05070e 100%);
+}
+.universe-root::after {
+  opacity: 0.02; /* keep only a whisper of grain */
+}
+
+/* lattice + occupied cells → cyan circuit */
+.universe-root .hex-cell {
+  stroke: rgba(148, 163, 184, 0.05);
+}
+.universe-root .hex-node {
+  fill: rgba(94, 234, 212, 0.04);
+  stroke: rgba(94, 234, 212, 0.2);
+}
+@keyframes hexPulse {
+  0%,
+  100% {
+    stroke: rgba(94, 234, 212, 0.16);
+  }
+  50% {
+    stroke: rgba(153, 246, 228, 0.38);
+  }
+}
+
+/* ambient particles + center mark */
+.universe-root .bubble {
+  background: radial-gradient(circle at 35% 30%, rgba(204, 251, 241, 0.9), rgba(45, 212, 191, 0.22));
+  box-shadow: 0 0 6px rgba(94, 234, 212, 0.4);
+}
+.universe-root .cm-ring {
+  border-color: rgba(94, 234, 212, 0.4);
+}
+
+/* connectors → assist edge language */
+.universe-root .line-svg path.spoke {
+  stroke: rgba(94, 234, 212, 0.5);
+}
+.universe-root .line-svg path.thread {
+  stroke: #3e5a58;
+}
+
+/* node discs glow cyan instead of ice-blue */
+.universe-root .map-node.is-child .disc {
+  box-shadow: 0 0 14px -2px rgba(94, 234, 212, 0.4);
+}
+.universe-root .map-node.is-domain .disc {
+  box-shadow: 0 0 20px -2px rgba(94, 234, 212, 0.45);
+}
+.universe-root .map-node.is-hub .disc {
+  border-color: rgba(94, 234, 212, 0.5);
+}
+.universe-root .map-node.is-child .hit:hover .disc {
+  color: #042f2e;
+}
+
+/* drawer + dashboards accents */
+.universe-root .drawer-metric {
+  background: rgba(94, 234, 212, 0.05);
+}
+.universe-root .drawer-conf.is-confirmed {
+  border-color: rgba(94, 234, 212, 0.55);
+  color: #99f6e4;
+}
+
+/* ---------- typography: serif display → Inter / mono kickers ---------- */
+.universe-root .ghost {
+  color: rgba(203, 213, 225, 0.055);
+  font-weight: 650;
+  letter-spacing: -0.01em;
+}
+.universe-root .dl-name {
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+}
+.universe-root .hl-name {
+  font-size: 25px;
+  font-weight: 650;
+  letter-spacing: -0.01em;
+}
+.universe-root .tooltip .tt-name {
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+.universe-root .font-u-display {
+  font-weight: 600;
+  letter-spacing: -0.015em;
+}
+/* stats read as instrument data, like the assist MetricCards */
+.universe-root .drawer-metric-v,
+.universe-root .dash-stat-v {
+  font-family: var(--font-mono);
+  font-weight: 600;
+  font-size: 17px;
+}
+/* every micro-uppercase label becomes an assist "kicker" */
+.universe-root .eyebrow,
+.universe-root .dl-sub,
+.universe-root .legend-title,
+.universe-root .tooltip .tt-kind,
+.universe-root .drawer-section-label,
+.universe-root .drawer-chip,
+.universe-root .drawer-fact-k,
+.universe-root .drawer-metric-k,
+.universe-root .drawer-link-note,
+.universe-root .drawer-related-meta,
+.universe-root .drawer-conf,
+.universe-root .cmdk-item-sub,
+.universe-root .cmdk-hint,
+.universe-root .map-hint {
+  font-family: var(--font-mono);
+}
