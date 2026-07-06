@@ -14,7 +14,6 @@ import TopBar from "./components/TopBar";
 import MapView from "./components/MapView";
 import Dashboards from "./components/Dashboards";
 import DetailDrawer, { type RelatedItem } from "./components/DetailDrawer";
-import CommandPalette from "./components/CommandPalette";
 import "./universe.css";
 
 export type ViewMode = "map" | "dash";
@@ -38,7 +37,6 @@ export default function UniverseModule({ onExit, onSendToAssist }: UniverseModul
   const [mode, setMode] = useState<ViewMode>("map");
   const [focus, setFocus] = useState<string | null>(null);
   const [selection, setSelection] = useState<Selection | null>(null);
-  const [paletteOpen, setPaletteOpen] = useState(false);
 
   const closeDrawer = useCallback(() => setSelection(null), []);
 
@@ -89,15 +87,6 @@ export default function UniverseModule({ onExit, onSendToAssist }: UniverseModul
     [childById],
   );
 
-  /** Palette: focus a domain on the map (always lands on the map view). */
-  const paletteFocusDomain = useCallback(
-    (id: string) => {
-      setMode("map");
-      handleSetFocus(id);
-    },
-    [handleSetFocus],
-  );
-
   /** Related nodes for the drawer, derived from the relation threads. */
   const related = useMemo<RelatedItem[]>(() => {
     const node = selection?.node;
@@ -137,23 +126,16 @@ export default function UniverseModule({ onExit, onSendToAssist }: UniverseModul
     return out;
   }, [selection, childById]);
 
-  // Global keys: ⌘K/Ctrl+K toggles the palette; Esc closes palette, then the
-  // drawer, then the focused branch. Arrow keys cycle domains while focused.
+  // Global keys: Esc closes the drawer, then the focused branch, then exits
+  // to Assist. Arrows cycle domains while focused. (⌘K lives in AppShell.)
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
-      if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "k") {
-        e.preventDefault();
-        setPaletteOpen((v) => !v);
-        return;
-      }
       if (e.key === "Escape") {
-        if (paletteOpen) setPaletteOpen(false);
-        else if (selection) setSelection(null);
+        if (selection) setSelection(null);
         else if (focus) resetFocus();
         else onExit(); // nothing open — leave the Universe
         return;
       }
-      if (paletteOpen) return; // palette owns the rest of the keys while open
       if ((e.key === "ArrowRight" || e.key === "ArrowLeft") && focus && !selection) {
         const dir = e.key === "ArrowRight" ? 1 : -1;
         const i = mapData.domains.findIndex((d) => d.id === focus);
@@ -164,7 +146,7 @@ export default function UniverseModule({ onExit, onSendToAssist }: UniverseModul
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-  }, [selection, focus, resetFocus, paletteOpen, onExit]);
+  }, [selection, focus, resetFocus, onExit]);
 
   // Deep-linking: read the view (#/universe/dash), focused domain
   // (#/universe/domain/<id>) or node (#/universe/node/<id>) from the URL hash
@@ -208,11 +190,16 @@ export default function UniverseModule({ onExit, onSendToAssist }: UniverseModul
       hashSyncedRef.current = true;
       return;
     }
-    if (!window.location.hash.startsWith("#/universe")) return; // exiting — leave the hash alone
-    const base = window.location.pathname + window.location.search;
-    if (mode === "dash") window.history.replaceState(null, "", `${base}#/universe/dash`);
-    else if (focus) window.history.replaceState(null, "", `${base}#/universe/domain/${focus}`);
-    else window.history.replaceState(null, "", `${base}#/universe`);
+    const current = window.location.hash;
+    if (!current.startsWith("#/universe")) return; // exiting — leave the hash alone
+    const next =
+      mode === "dash" ? "#/universe/dash" : focus ? `#/universe/domain/${focus}` : "#/universe";
+    // A resting map must not clobber a node deep-link (drawer state isn't
+    // reflected in the hash — only the palette / deep links write node URLs).
+    if (next === "#/universe" && current.startsWith("#/universe/node/")) return;
+    if (current !== next) {
+      window.history.replaceState(null, "", window.location.pathname + window.location.search + next);
+    }
   }, [focus, mode]);
 
   return (
@@ -260,16 +247,6 @@ export default function UniverseModule({ onExit, onSendToAssist }: UniverseModul
         onOpenNode={openNodeById}
         onClose={closeDrawer}
         onSendToAssist={onSendToAssist}
-      />
-
-      <CommandPalette
-        open={paletteOpen}
-        data={mapData}
-        onClose={() => setPaletteOpen(false)}
-        onFocusDomain={paletteFocusDomain}
-        onOpenNode={openNodeById}
-        onSetMode={handleModeChange}
-        onReset={resetFocus}
       />
     </div>
   );

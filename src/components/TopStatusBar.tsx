@@ -4,14 +4,16 @@
    A slim, elegant top bar. Left: product identity. Right: live
    system status indicators. Quiet by design.
    ============================================================ */
-import { Cpu, Boxes, BrainCircuit } from "lucide-react";
+import { Cpu, Boxes, BrainCircuit, Search } from "lucide-react";
 import type { CoreData } from "../types";
 
 interface TopStatusBarProps {
   core: CoreData;
+  /** Open the global ⌘K palette. */
+  onOpenPalette?: () => void;
 }
 
-export default function TopStatusBar({ core }: TopStatusBarProps) {
+export default function TopStatusBar({ core, onOpenPalette }: TopStatusBarProps) {
   const [cells, agents, context] = core.signals;
   const items = [
     { icon: Boxes, text: cells, tint: "text-cyan" },
@@ -35,6 +37,17 @@ export default function TopStatusBar({ core }: TopStatusBarProps) {
             {text}
           </span>
         ))}
+        {onOpenPalette && (
+          <button
+            type="button"
+            onClick={onOpenPalette}
+            aria-label="Search everything (⌘K)"
+            className="surface flex items-center gap-1.5 rounded-full px-2.5 py-1 text-[0.72rem] text-muted outline-none transition-colors duration-200 hover:border-line-strong hover:text-ink focus-visible:ring-2 focus-visible:ring-cyan/50"
+          >
+            <Search className="h-3 w-3" strokeWidth={1.8} />
+            <span className="font-mono">⌘K</span>
+          </button>
+        )}
       </div>
     </header>
   );

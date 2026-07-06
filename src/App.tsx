@@ -36,9 +36,13 @@ interface AppProps {
   active?: boolean;
   /** Enter the Universe layer (full overview, a domain, or a node). */
   onOpenUniverse?: (target?: Pick<UniverseLink, "domain" | "node">) => void;
+  /** One-shot select request from the global palette (n = nonce). */
+  selectRequest?: { id: string; n: number } | null;
+  /** Open the global ⌘K palette (rendered by AppShell). */
+  onOpenPalette?: () => void;
 }
 
-export default function App({ active = true, onOpenUniverse }: AppProps) {
+export default function App({ active = true, onOpenUniverse, selectRequest, onOpenPalette }: AppProps) {
   const { core, nodes } = consoleData;
 
   /** Focus Mode: which main cell is centered (its sub-cells shown). */
@@ -126,6 +130,19 @@ export default function App({ active = true, onOpenUniverse }: AppProps) {
     },
     [select],
   );
+
+  // Global palette: select a cell / sub-cell on request.
+  useEffect(() => {
+    if (!selectRequest) return;
+    const { id } = selectRequest;
+    if (id === "core" || honeycombById.has(id)) {
+      setFocusId(null);
+      setSelectedId(id);
+    } else if (subCellParent.has(id)) {
+      setFocusId(subCellParent.get(id)!);
+      setSelectedId(id);
+    }
+  }, [selectRequest]);
 
   // Deep-link ?node=<id>
   useEffect(() => {
@@ -225,7 +242,7 @@ export default function App({ active = true, onOpenUniverse }: AppProps) {
 
   return (
     <div className="flex min-h-screen flex-col">
-      <TopStatusBar core={core} />
+      <TopStatusBar core={core} onOpenPalette={onOpenPalette} />
 
       <main className="flex min-h-0 flex-1 flex-col gap-4 p-4 cockpit:flex-row">
         {/* graph canvas */}

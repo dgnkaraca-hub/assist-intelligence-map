@@ -20,6 +20,7 @@
 import { lazy, Suspense, useCallback, useEffect, useState } from "react";
 import { AnimatePresence, MotionConfig, motion } from "framer-motion";
 import AssistHome from "../App";
+import GlobalPalette from "../components/GlobalPalette";
 import { addItemToCell } from "../lib/itemsStore";
 import type { UniverseLink } from "../types";
 import type { ChildNode } from "../data/universeData";
@@ -31,11 +32,28 @@ const inUniverse = () => window.location.hash.startsWith("#/universe");
 
 export default function AppShell() {
   const [universeOpen, setUniverseOpen] = useState(inUniverse);
+  const [paletteOpen, setPaletteOpen] = useState(false);
+  /** A one-shot "select this cell" request for the Assist layer (n = nonce). */
+  const [selectRequest, setSelectRequest] = useState<{ id: string; n: number } | null>(null);
 
   useEffect(() => {
     const onHash = () => setUniverseOpen(inUniverse());
     window.addEventListener("hashchange", onHash);
     return () => window.removeEventListener("hashchange", onHash);
+  }, []);
+
+  // ⌘K / Ctrl+K toggles the ONE global palette, wherever you are. Capture
+  // phase, so neither layer's own key handling ever sees it.
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "k") {
+        e.preventDefault();
+        e.stopPropagation();
+        setPaletteOpen((v) => !v);
+      }
+    };
+    window.addEventListener("keydown", onKey, true);
+    return () => window.removeEventListener("keydown", onKey, true);
   }, []);
 
   /** Enter the Universe — pushes a history entry so Back returns home. */
@@ -60,10 +78,29 @@ export default function AppShell() {
     addItemToCell("inbox", node.label, node.tip);
   }, []);
 
+  /** Palette: jump to a #/universe... hash (enters the Universe if needed). */
+  const paletteGoHash = useCallback((hash: string) => {
+    window.location.hash = hash;
+  }, []);
+
+  /** Palette: return to Assist and optionally select a cell / sub-cell. */
+  const paletteGoAssist = useCallback(
+    (cellId?: string) => {
+      if (inUniverse()) exitUniverse();
+      if (cellId) setSelectRequest((prev) => ({ id: cellId, n: (prev?.n ?? 0) + 1 }));
+    },
+    [exitUniverse],
+  );
+
   return (
     <MotionConfig reducedMotion="user">
       {/* The Assist home stays mounted underneath so its state survives. */}
-      <AssistHome active={!universeOpen} onOpenUniverse={openUniverse} />
+      <AssistHome
+        active={!universeOpen}
+        onOpenUniverse={openUniverse}
+        selectRequest={selectRequest}
+        onOpenPalette={() => setPaletteOpen(true)}
+      />
 
       <AnimatePresence>
         {universeOpen && (
@@ -81,6 +118,13 @@ export default function AppShell() {
           </motion.div>
         )}
       </AnimatePresence>
+
+      <GlobalPalette
+        open={paletteOpen}
+        onClose={() => setPaletteOpen(false)}
+        onGoHash={paletteGoHash}
+        onGoAssist={paletteGoAssist}
+      />
     </MotionConfig>
   );
 }
